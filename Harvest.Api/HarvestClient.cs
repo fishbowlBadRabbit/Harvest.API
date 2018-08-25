@@ -504,7 +504,7 @@ namespace Harvest.Api
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<Invoice>> GetInvoices(int? page, int? perPage, DateTime? updatedSince, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<List<Invoice>> GetInvoices(DateTime? updatedSince, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -673,7 +673,7 @@ namespace Harvest.Api
                 .SendAsync<TaskAssignment>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<TaskAssignment>> GetTaskAssignments(long projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<List<TaskAssignment>> GetTaskAssignments(long? projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await SimpleRequestBuilder($"{harvestApiUrl}/projects/{projectId}/task_assignments", accountId)
                 .Query("page", page)
