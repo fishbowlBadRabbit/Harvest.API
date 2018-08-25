@@ -24,14 +24,18 @@ namespace Harvest.Api
 
         public decimal? CostBudget { get; set; }
         public bool CostBudgetIncludeExpenses { get; set; }
-        public decimal HourlyRate { get; set; }
+        public decimal? HourlyRate { get; set; }
+
+        public decimal? Estimate { get; set; }
+        public string EstimateBy { get; set; }
     }
 
-    public class Client
+    public class Client : BaseModel
     {
-        public long Id { get; set; }
         public string Name { get; set; }
         public string Currency { get; set; }
+        public bool IsActive { get; set; }
+        public string Address { get; set; }
     }
 
     public class ProjectsResponse : PagedList
