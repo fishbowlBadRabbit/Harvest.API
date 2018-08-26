@@ -20,7 +20,7 @@ namespace Harvest.Api
         public DateTime? EndsOn { get; set; }
         public bool IsBillable { get; set; }
         public string Notes { get; set; }
-        public Client Client { get; set; }
+        public IdNameModel Client { get; set; }
 
         public decimal? CostBudget { get; set; }
         public bool CostBudgetIncludeExpenses { get; set; }

@@ -90,7 +90,7 @@ namespace Harvest.Api
         {
             var query = Utilities.ParseQueryString(callbackUri.GetComponents(UriComponents.Query, UriFormat.UriEscaped));
 
-            if (!query.TryGetValue("state", out var urlState) || urlState != (state ?? AuthState)) 
+            if (!query.TryGetValue("state", out var urlState) || urlState != (state ?? AuthState))
                 throw new InvalidOperationException("OAuth states doesn't match");
 
             AuthResponse result = null;
@@ -260,7 +260,7 @@ namespace Harvest.Api
                 .SendAsync<TimeEntry>(_httpClient, cancellationToken);
         }
 
-        public async Task<ProjectAssignmentsResponse> GetProjectAssignmentsAsync(long? userId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null, 
+        public async Task<ProjectAssignmentsResponse> GetProjectAssignmentsAsync(long? userId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null,
             long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
@@ -273,7 +273,7 @@ namespace Harvest.Api
                 .SendAsync<ProjectAssignmentsResponse>(_httpClient, cancellationToken);
         }
 
-        public async Task<ProjectsResponse> GetProjectsAsync(long? clientId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null, 
+        public async Task<ProjectsResponse> GetProjectsAsync(long? clientId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null,
             long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
@@ -285,7 +285,7 @@ namespace Harvest.Api
                 .SendAsync<ProjectsResponse>(_httpClient, cancellationToken);
         }
 
-        public async Task<TasksResponse> GetTasksAsync(DateTime? updatedSince = null, int? page = null, int? perPage = null, 
+        public async Task<TasksResponse> GetTasksAsync(DateTime? updatedSince = null, int? page = null, int? perPage = null,
             long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
@@ -336,7 +336,7 @@ namespace Harvest.Api
                 .Form("first_name", firstName)
                 .Form("last_name", lastName)
                 .Form("email", email)
-                .Form("telephone", telephone) 
+                .Form("telephone", telephone)
                 .Form("timezone", telephone)
                 .Form("has_access_to_all_future_projects", hasAccessToAllFutureProjects)
                 .Form("is_contractor", isContractor)
@@ -392,15 +392,26 @@ namespace Harvest.Api
         }
 
         #region Clients
-        public async Task<Client> CreateClient(Client client, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+
+        public async Task<Client> CreateClient(string name, string details, bool active, string currency, long? highriseId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
             return await SimpleRequestBuilder($"{harvestApiUrl}/clients", accountId, HttpMethod.Post)
-                .Form("name", client.Name)
-                .Form("is_active", client.IsActive)
-                .Form("currency", client.Currency.ToString())
+                .Form("name", name)
+                .Form("is_active", active)
+                .Form("currency", currency)
+                .Form("details", details)
                 .SendAsync<Client>(_httpClient, cancellationToken);
         }
+        //public async Task<Client> CreateClient(Client client, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    await RefreshTokenIsNeeded();
+        //    return await SimpleRequestBuilder($"{harvestApiUrl}/clients", accountId, HttpMethod.Post)
+        //        .Form("name", client.Name)
+        //        .Form("is_active", client.IsActive)
+        //        .Form("currency", client.Currency.ToString())
+        //        .SendAsync<Client>(_httpClient, cancellationToken);
+        //}
 
         public async Task<Client> GetClient(long clientId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -463,26 +474,22 @@ namespace Harvest.Api
 
         #region Invoice
 
-        public async Task<Invoice> CreateInvoice(Invoice invoice, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, string lineItems, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
             return await SimpleRequestBuilder($"{harvestApiUrl}/invoices", accountId, HttpMethod.Post)
-                .Form("client_id", invoice.Client.Id)
-                .Form("retainer_id", invoice.Retainer.Id)
-                .Form("estimate_id", invoice.Estimate.Id)
-                .Form("number", invoice.Number)
-                .Form("purchase_order", invoice.PurchaseOrder)
-                .Form("tax", invoice.Tax)
-                .Form("tax2", invoice.Tax2)
-                .Form("discount", invoice.Discount)
-                .Form("subject", invoice.Subject)
-                .Form("notes", invoice.Notes)
-                .Form("currency", invoice.Currency)
-                .Form("issue_date", invoice.IssueDate)
-                .Form("due_date", invoice.DueDate)
-                .Form("payment_term", invoice.PaymentTerm)
-                .Form("line_items", String.Join(",", invoice.LineItems))
+                .Form("client_id", clientId)
+                .Form("number", number)
+                .Form("purchase_order", purchaseOrder)
+                .Form("tax", tax)
+                .Form("tax2", tax2)
+                .Form("subject", subject)
+                .Form("notes", notes)
+                .Form("currency", currency)
+                .Form("issue_date", issuedAt)
+                .Form("due_date", dueAt)
+                .Form("line_items", String.Join(",", lineItems))
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }
 
@@ -517,30 +524,56 @@ namespace Harvest.Api
         #endregion
 
         #region Project
-        public async Task<Project> CreateProject(Project project, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+
+        public async Task<Project> CreateProject(string name, long? clientId, bool? active, string billBy, string code, string notes, string budgetBy, decimal? budget, bool? billable, decimal? hourlyRate, bool? notifyWhenOverBudget, decimal? overBudgetNotificationPercentage, bool? showBudgetToAll, decimal? costBudget, bool? costBudgetIncludeExpenses, DateTime? startsOn, DateTime? endsOn, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
             return await SimpleRequestBuilder($"{harvestApiUrl}/projects", accountId, HttpMethod.Post)
-                .Form("client_id", project.Client.Id)
-                .Form("name", project.Name)
-                .Form("code", project.Code)
-                .Form("is_active", project.IsActive)
-                .Form("is_billable", project.IsBillable)
-                .Form("bill_by", project.BillBy)
-                .Form("hourly_rate", project.HourlyRate)
-                .Form("budget", project.Budget)
-                .Form("budget_by", project.BudgetBy)
-                .Form("notify_when_over_budget", project.NotifyWhenOverBudget)
-                .Form("over_budget_notification_percentage", project.OverBudgetNotificationPercentage)
-                .Form("show_budget_to_all", project.ShowBudgetToAll)
-                .Form("cost_budget", project.CostBudget)
-                .Form("cost_budget_include_expenses", project.CostBudgetIncludeExpenses)
-                .Form("notes", project.Notes)
-                .Form("starts_on", project.StartsOn)
-                .Form("ends_on", project.EndsOn)
+                .Form("client_id", clientId)
+                .Form("name", name)
+                .Form("code", code)
+                .Form("is_active", active)
+                .Form("is_billable", billable)
+                .Form("bill_by", billBy)
+                .Form("hourly_rate", hourlyRate)
+                .Form("budget", budget)
+                .Form("budget_by", budgetBy)
+                .Form("notify_when_over_budget", notifyWhenOverBudget)
+                .Form("over_budget_notification_percentage", overBudgetNotificationPercentage)
+                .Form("show_budget_to_all", showBudgetToAll)
+                .Form("cost_budget", costBudget)
+                .Form("cost_budget_include_expenses", costBudgetIncludeExpenses)
+                .Form("notes", notes)
+                .Form("starts_on", startsOn)
+                .Form("ends_on", endsOn)
                 .SendAsync<Project>(_httpClient, cancellationToken);
         }
+
+        //public async Task<Project> CreateProject(Project project, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    await RefreshTokenIsNeeded();
+
+        //    return await SimpleRequestBuilder($"{harvestApiUrl}/projects", accountId, HttpMethod.Post)
+        //        .Form("client_id", project.Client.Id)
+        //        .Form("name", project.Name)
+        //        .Form("code", project.Code)
+        //        .Form("is_active", project.IsActive)
+        //        .Form("is_billable", project.IsBillable)
+        //        .Form("bill_by", project.BillBy)
+        //        .Form("hourly_rate", project.HourlyRate)
+        //        .Form("budget", project.Budget)
+        //        .Form("budget_by", project.BudgetBy)
+        //        .Form("notify_when_over_budget", project.NotifyWhenOverBudget)
+        //        .Form("over_budget_notification_percentage", project.OverBudgetNotificationPercentage)
+        //        .Form("show_budget_to_all", project.ShowBudgetToAll)
+        //        .Form("cost_budget", project.CostBudget)
+        //        .Form("cost_budget_include_expenses", project.CostBudgetIncludeExpenses)
+        //        .Form("notes", project.Notes)
+        //        .Form("starts_on", project.StartsOn)
+        //        .Form("ends_on", project.EndsOn)
+        //        .SendAsync<Project>(_httpClient, cancellationToken);
+        //}
 
         public async Task<Project> GetProject(long projectId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -588,38 +621,38 @@ namespace Harvest.Api
            .SendAsync<Project>(_httpClient, cancellationToken);
         }
 
-        public async Task<Project> UpdateProject(Project project, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            await RefreshTokenIsNeeded();
+        //public async Task<Project> UpdateProject(Project project, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    await RefreshTokenIsNeeded();
 
-            return await UpdateProject(
+        //    return await UpdateProject(
 
-                project.Id,
-                project.IsActive,
-                project.IsBillable,
-                project.BillBy,
-                project.Budget,
-                project.BudgetBy,
-                project.Client.Id,
-                project.Code,
-                project.CostBudget,
-                project.CostBudgetIncludeExpenses,
-                project.EndsOn,
-                project.Estimate,
-                project.EstimateBy,
-                project.HourlyRate,
-                project.Name,
-                project.Notes,
-                project.NotifyWhenOverBudget,
-                project.OverBudgetNotificationPercentage,
-                project.ShowBudgetToAll,
-                project.StartsOn,
+        //        project.Id,
+        //        project.IsActive,
+        //        project.IsBillable,
+        //        project.BillBy,
+        //        project.Budget,
+        //        project.BudgetBy,
+        //        project.Client.Id,
+        //        project.Code,
+        //        project.CostBudget,
+        //        project.CostBudgetIncludeExpenses,
+        //        project.EndsOn,
+        //        project.Estimate,
+        //        project.EstimateBy,
+        //        project.HourlyRate,
+        //        project.Name,
+        //        project.Notes,
+        //        project.NotifyWhenOverBudget,
+        //        project.OverBudgetNotificationPercentage,
+        //        project.ShowBudgetToAll,
+        //        project.StartsOn,
 
-                accountId,
-                cancellationToken
+        //        accountId,
+        //        cancellationToken
 
-                );
-        }
+        //        );
+        //}
         #endregion
 
         #region Expenses
@@ -641,12 +674,12 @@ namespace Harvest.Api
         #endregion
 
         #region Payment
-        public async Task<PaymentsResponse> GetPayments( DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<PaymentsResponse> GetPayments(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
             return await SimpleRequestBuilder($"{harvestApiUrl}/payments/", accountId)
-                .Query("invoice_id", invoiceId)              
+                .Query("invoice_id", invoiceId)
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
