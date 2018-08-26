@@ -587,13 +587,15 @@ namespace Harvest.Api
         {
             await RefreshTokenIsNeeded();
 
-            return await SimpleRequestBuilder($"{harvestApiUrl}/contacts/", accountId)
+            var response = await SimpleRequestBuilder($"{harvestApiUrl}/projects/", accountId)
              .Query("client_id", clientId)
              .Query("is_active", isActive)
              .Query("page", page)
              .Query("per_page", perPage)
              .Query("updated_since", updatedSince)
              .SendAsync<ProjectsResponse>(_httpClient, cancellationToken);
+
+            return response;
         }
 
         public async Task<Project> UpdateProject(long projectId, bool? active, bool? billable, string billBy, decimal? budget, string budgetBy, long? clientId, string code, decimal? costBudget, bool? costBudgetIncludeExpenses, DateTime? endsOn, decimal? estimate, string estimateBy, decimal? hourlyRate, string name, string notes, bool? notifyWhenOverBudget, decimal? overBudgetNotificationPercentage, bool? showBudgetToAll, DateTime? startsOn, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
