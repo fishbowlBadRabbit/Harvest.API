@@ -25,7 +25,7 @@ namespace Harvest.Api
     public class ExpenseCategory : BaseModel
     {
         public string Name { get; set; }
-        public decimal UnitPrice { get; set; }
+        public decimal? UnitPrice { get; set; }
         public string UnitName { get; set; }
     }
 
