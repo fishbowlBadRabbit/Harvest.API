@@ -13,12 +13,11 @@ namespace Harvest.Api
         public string RecordedByEmail { get; set; }
         public string Notes { get; set; }
         public string TransactionId { get; set; }
-        public PaymentGateway PaymentGateway { get; set; }
+        public IdNameModel PaymentGateway { get; set; }
     }
 
-    public class PaymentGateway
+    public class PaymentsResponse : PagedList
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
+        public Payment[] Payments { get; set; }
     }
 }

@@ -42,4 +42,9 @@ namespace Harvest.Api
     {
         public Project[] Projects { get; set; }
     }
+
+    public class ClientsResponse : PagedList
+    {
+        public Client[] Clients { get; set; }
+    }
 }

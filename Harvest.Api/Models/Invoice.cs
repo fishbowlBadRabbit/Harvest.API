@@ -6,11 +6,11 @@ namespace Harvest.Api
 {
     public class Invoice : BaseModel
     {
-        public Client Client { get; set; }
+        public IdNameModel Client { get; set; }
         public List<InvoiceLineItem> LineItems { get; set; }
-        public Estimate Estimate { get; set; }
-        public Retainer Retainer { get; set; }
-        public Creator Creator { get; set; }
+        public IdNameModel Estimate { get; set; }
+        public IdNameModel Retainer { get; set; }
+        public IdNameModel Creator { get; set; }
         public string ClientKey { get; set; }
         public string Number { get; set; }
         public string PurchaseOrder { get; set; }
@@ -47,5 +47,10 @@ namespace Harvest.Api
         public decimal Amount { get; set; }
         public bool Taxed { get; set; }
         public bool Taxed2 { get; set; }
+    }
+
+    public class InvoiceResponse : PagedList
+    {
+        public Invoice[] Invoices { get; set; }
     }
 }

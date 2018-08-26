@@ -410,7 +410,7 @@ namespace Harvest.Api
                .SendAsync<Client>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<Client>> GetClients(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ClientsResponse> GetClients(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -418,14 +418,14 @@ namespace Harvest.Api
                .Query("page", page)
                .Query("per_page", perPage)
                .Query("updated_since", updatedSince)
-               .SendAsync<List<Client>>(_httpClient, cancellationToken);
+               .SendAsync<ClientsResponse>(_httpClient, cancellationToken);
         }
 
         #endregion
 
         #region ClientContacts
 
-        public async Task<List<ClientContacts>> GetContacts(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ClientContactsResponse> GetContacts(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -433,14 +433,14 @@ namespace Harvest.Api
                .Query("page", page)
                .Query("per_page", perPage)
                .Query("updated_since", updatedSince)
-               .SendAsync<List<ClientContacts>>(_httpClient, cancellationToken);
+               .SendAsync<ClientContactsResponse>(_httpClient, cancellationToken);
         }
 
         #endregion
 
         #region ExpenseCategory
 
-        public async Task<List<ExpenseCategory>> GetExpenseCategories(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ExpenseCategoryResponse> GetExpenseCategories(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -448,7 +448,7 @@ namespace Harvest.Api
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
-                .SendAsync<List<ExpenseCategory>>(_httpClient, cancellationToken);
+                .SendAsync<ExpenseCategoryResponse>(_httpClient, cancellationToken);
         }
 
         public async Task<ExpenseCategory> GetExpenseCategory(long categoryID, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -504,7 +504,7 @@ namespace Harvest.Api
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<Invoice>> GetInvoices(DateTime? updatedSince, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<InvoiceResponse> GetInvoices(DateTime? updatedSince, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -512,7 +512,7 @@ namespace Harvest.Api
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
-                .SendAsync<List<Invoice>>(_httpClient, cancellationToken);
+                .SendAsync<InvoiceResponse>(_httpClient, cancellationToken);
         }
         #endregion
 
@@ -550,7 +550,7 @@ namespace Harvest.Api
              .SendAsync<Project>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<Project>> GetProjects(long? clientId, DateTime? updatedSince, long? accountId = null, int? page = 1, int? perPage = 100, bool? isActive = true, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ProjectsResponse> GetProjects(long? clientId, DateTime? updatedSince, long? accountId = null, int? page = 1, int? perPage = 100, bool? isActive = true, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -560,7 +560,7 @@ namespace Harvest.Api
              .Query("page", page)
              .Query("per_page", perPage)
              .Query("updated_since", updatedSince)
-             .SendAsync<List<Project>>(_httpClient, cancellationToken);
+             .SendAsync<ProjectsResponse>(_httpClient, cancellationToken);
         }
 
         public async Task<Project> UpdateProject(long projectId, bool? active, bool? billable, string billBy, decimal? budget, string budgetBy, long? clientId, string code, decimal? costBudget, bool? costBudgetIncludeExpenses, DateTime? endsOn, decimal? estimate, string estimateBy, decimal? hourlyRate, string name, string notes, bool? notifyWhenOverBudget, decimal? overBudgetNotificationPercentage, bool? showBudgetToAll, DateTime? startsOn, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -623,7 +623,7 @@ namespace Harvest.Api
         #endregion
 
         #region Expenses
-        public async Task<List<Expense>> GetExpenses(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, long? projectId = null, long? clientId = null, long? userId = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ExpensesResponse> GetExpenses(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, long? projectId = null, long? clientId = null, long? userId = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -636,12 +636,12 @@ namespace Harvest.Api
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
-                .SendAsync<List<Expense>>(_httpClient, cancellationToken);
+                .SendAsync<ExpensesResponse>(_httpClient, cancellationToken);
         }
         #endregion
 
         #region Payment
-        public async Task<List<Payment>> GetPayments( DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<PaymentsResponse> GetPayments( DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -650,7 +650,7 @@ namespace Harvest.Api
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
-                .SendAsync<List<Payment>>(_httpClient, cancellationToken);
+                .SendAsync<PaymentsResponse>(_httpClient, cancellationToken);
         }
         #endregion
 
@@ -673,19 +673,19 @@ namespace Harvest.Api
                 .SendAsync<TaskAssignment>(_httpClient, cancellationToken);
         }
 
-        public async Task<List<TaskAssignment>> GetTaskAssignments(long? projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TaskAssignmentsResponse> GetTaskAssignments(long? projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await SimpleRequestBuilder($"{harvestApiUrl}/projects/{projectId}/task_assignments", accountId)
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
                 .Query("is_active", isActive)
-                .SendAsync<List<TaskAssignment>>(_httpClient, cancellationToken);
+                .SendAsync<TaskAssignmentsResponse>(_httpClient, cancellationToken);
         }
         #endregion
 
         #region UserAssignment
-        public async Task<List<UserAssignment>> GetUserAssignments(DateTime? updatedSince = null, long? projectId = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<UserAssignmentsResponse> GetUserAssignments(DateTime? updatedSince = null, long? projectId = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -694,7 +694,7 @@ namespace Harvest.Api
                .Query("per_page", perPage)
                .Query("updated_since", updatedSince)
                .Query("is_active", isActive)
-               .SendAsync<List<UserAssignment>>(_httpClient, cancellationToken);
+               .SendAsync<UserAssignmentsResponse>(_httpClient, cancellationToken);
         }
         #endregion
 

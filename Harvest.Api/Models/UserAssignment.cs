@@ -13,4 +13,9 @@ namespace Harvest.Api
         public decimal HourlyRate { get; set; }
         public decimal Budget { get; set; }
     }
+
+    public class UserAssignmentsResponse : PagedList
+    {
+        public UserAssignment[] UserAssignments { get; set; }
+    }
 }

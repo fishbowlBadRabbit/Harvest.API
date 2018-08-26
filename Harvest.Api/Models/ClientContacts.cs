@@ -6,7 +6,7 @@ namespace Harvest.Api
 {
     public class ClientContacts : BaseModel
     {
-        public Client Client { get; set; }
+        public IdNameModel Client { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -14,5 +14,10 @@ namespace Harvest.Api
         public string PhoneOffice { get; set; }
         public string PhoneMobile { get; set; }
         public string Fax { get; set; }
+    }
+
+    public class ClientContactsResponse : PagedList
+    {
+        public ClientContacts[] ClientContacts { get; set; }
     }
 }

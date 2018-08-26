@@ -6,13 +6,13 @@ namespace Harvest.Api
 {
     public class Expense : BaseModel
     {
-        public Client Client { get; set; }
-        public Project Project { get; set; }
-        public ExpenseCategory ExpenseCategory { get; set; }
-        public User User { get; set; }
-        public UserAssignment UserAssignment { get; set; }
-        public Receipt Receipt { get; set; }
-        public Invoice Invoice { get; set; }
+        public IdNameModel Client { get; set; }
+        public IdNameModel Project { get; set; }
+        public IdNameModel ExpenseCategory { get; set; }
+        public IdNameModel User { get; set; }
+        public IdNameModel UserAssignment { get; set; }
+        public IdNameModel Receipt { get; set; }
+        public IdNameModel Invoice { get; set; }
         public string Notes { get; set; }
         public bool Billable { get; set; }
         public bool IsClosed { get; set; }
@@ -27,5 +27,15 @@ namespace Harvest.Api
         public string Name { get; set; }
         public decimal UnitPrice { get; set; }
         public string UnitName { get; set; }
+    }
+
+    public class ExpenseCategoryResponse : PagedList
+    {
+        public ExpenseCategory[] ExpenseCategories { get; set; }
+    }
+
+    public class ExpensesResponse : PagedList
+    {
+        public Expense[] Expenses { get; set; }
     }
 }
