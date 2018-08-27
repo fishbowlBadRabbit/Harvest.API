@@ -11,7 +11,7 @@ namespace Harvest.Api
         public IdNameModel ExpenseCategory { get; set; }
         public IdNameModel User { get; set; }
         public IdNameModel UserAssignment { get; set; }
-        public IdNameModel Receipt { get; set; }
+        public Receipt Receipt { get; set; }
         public IdNameModel Invoice { get; set; }
         public string Notes { get; set; }
         public bool Billable { get; set; }
