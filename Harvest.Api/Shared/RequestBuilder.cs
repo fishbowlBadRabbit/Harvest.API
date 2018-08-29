@@ -35,7 +35,7 @@ namespace Harvest.Api
                 {
                     NamingStrategy = new SnakeCaseNamingStrategy()
                 },
-                Converters = new [] {
+                Converters = new[] {
                     new TimeSpanConverter()
                 }
             });
@@ -196,7 +196,7 @@ namespace Harvest.Api
         {
             if (value != null)
                 _json[name] = value;
-            
+
             return this;
         }
 
@@ -331,7 +331,7 @@ namespace Harvest.Api
                 else
                     builder.Append("&");
 
-                if(item.Value != null)
+                if (item.Value != null)
                     builder.Append(Uri.EscapeDataString(item.Key)).Append("=").Append(Uri.EscapeDataString(item.Value));
             }
 

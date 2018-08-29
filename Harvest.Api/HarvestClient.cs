@@ -8,7 +8,7 @@ using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Harvest.Api
 {
-    public class HarvestClient : IDisposable
+    public class HarvestClient : IHarvestClient, IDisposable
     {
         #region Constants
         private const string tokenType = "Bearer";
