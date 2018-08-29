@@ -13,4 +13,9 @@ namespace Harvest.Api
 
         public IdNameModel Task { get; set; }
     }
+
+    public class TaskAssignmentsResponse : PagedList
+    {
+        public TaskAssignment[] TaskAssignments { get; set; }
+    }
 }
