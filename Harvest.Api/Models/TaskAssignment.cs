@@ -12,6 +12,7 @@ namespace Harvest.Api
         public decimal? Budget { get; set; }
 
         public IdNameModel Task { get; set; }
+        public IdNameCodeModel Project { get; set; }
     }
 
     public class TaskAssignmentsResponse : PagedList

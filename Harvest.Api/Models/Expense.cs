@@ -27,6 +27,7 @@ namespace Harvest.Api
         public string Name { get; set; }
         public decimal? UnitPrice { get; set; }
         public string UnitName { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class ExpenseCategoryResponse : PagedList

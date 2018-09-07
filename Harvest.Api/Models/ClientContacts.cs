@@ -18,6 +18,6 @@ namespace Harvest.Api
 
     public class ClientContactsResponse : PagedList
     {
-        public ClientContacts[] ClientContacts { get; set; }
+        public ClientContacts[] Contacts { get; set; }
     }
 }

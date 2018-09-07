@@ -9,9 +9,9 @@ namespace Harvest.Api
         public Project Project { get; set; }
         public User User { get; set; }
         public bool IsActive { get; set; }
-        public bool IsProjectManger { get; set; }
-        public decimal HourlyRate { get; set; }
-        public decimal Budget { get; set; }
+        public bool IsProjectManager { get; set; }
+        public decimal? HourlyRate { get; set; }
+        public decimal? Budget { get; set; }
     }
 
     public class UserAssignmentsResponse : PagedList
