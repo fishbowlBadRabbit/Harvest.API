@@ -39,28 +39,43 @@ namespace Harvest.Api
         #endregion
 
         #region Constructor
-        public HarvestClient(string userAgent, HttpClientHandler httpClientHandler = null)
+        //public HarvestClient(string userAgent, HttpClientHandler httpClientHandler = null)
+        //{
+        //    if (string.IsNullOrEmpty(userAgent))
+        //        throw new ArgumentNullException(nameof(userAgent));
+
+        //    this.UserAgent = userAgent;
+
+        //    _httpClient = new HttpClient(httpClientHandler ?? new HttpClientHandler());
+        //    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RequestBuilder.JsonMimeType));
+        //    _httpClient.DefaultRequestHeaders.Add("User-Agent", this.UserAgent);
+        //}
+
+        public HarvestClient(string userAgent, string accessToken)
+            
         {
             if (string.IsNullOrEmpty(userAgent))
                 throw new ArgumentNullException(nameof(userAgent));
 
             this.UserAgent = userAgent;
 
-            _httpClient = new HttpClient(httpClientHandler ?? new HttpClientHandler());
+            _httpClient = new HttpClient(new HttpClientHandler());
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RequestBuilder.JsonMimeType));
             _httpClient.DefaultRequestHeaders.Add("User-Agent", this.UserAgent);
+
+            this.Authorize(accessToken, null, 0);
         }
         #endregion
 
         #region Methods
-        public static HarvestClient FromAccessToken(string userAgent, string accessToken, string refreshToken = null, long expiresIn = 0, HttpClientHandler httpClientHandler = null)
-        {
-            var client = new HarvestClient(userAgent, httpClientHandler);
+        //public static HarvestClient FromAccessToken(string userAgent, string accessToken, string refreshToken = null, long expiresIn = 0, HttpClientHandler httpClientHandler = null)
+        //{
+        //    var client = new HarvestClient(userAgent, httpClientHandler);
 
-            client.Authorize(accessToken, refreshToken, expiresIn);
+        //    client.Authorize(accessToken, refreshToken, expiresIn);
 
-            return client;
-        }
+        //    return client;
+        //}
         #endregion
 
         #region Auth methods
