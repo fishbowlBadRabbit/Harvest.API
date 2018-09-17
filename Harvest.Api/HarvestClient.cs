@@ -723,9 +723,9 @@ namespace Harvest.Api
                 .SendAsync<TaskAssignment>(_httpClient, cancellationToken);
         }
 
-        public async Task<TaskAssignmentsResponse> GetTaskAssignments(long? projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await SimpleRequestBuilder($"{harvestApiUrl}/projects/{projectId}/task_assignments", accountId)
+            return await SimpleRequestBuilder($"{harvestApiUrl}/task_assignments", accountId)
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
@@ -735,11 +735,11 @@ namespace Harvest.Api
         #endregion
 
         #region UserAssignment
-        public async Task<UserAssignmentsResponse> GetUserAssignments(DateTime? updatedSince = null, long? projectId = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<UserAssignmentsResponse> GetUserAssignments(DateTime? updatedSince = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
-            return await SimpleRequestBuilder($"{harvestApiUrl}/projects/{projectId}/user_assignments", accountId)
+            return await SimpleRequestBuilder($"{harvestApiUrl}/user_assignments", accountId)
                .Query("page", page)
                .Query("per_page", perPage)
                .Query("updated_since", updatedSince)

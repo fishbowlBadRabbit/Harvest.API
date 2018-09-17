@@ -127,11 +127,11 @@ namespace Harvest.Api
         #region taskAssignment
         Task<TaskAssignment> GetTaskAssignment(long projectId, long assignmentId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<TaskAssignmentsResponse> GetTaskAssignments(long? projectId, DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region UserAssignment
-        Task<UserAssignmentsResponse> GetUserAssignments(DateTime? updatedSince = null, long? projectId = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<UserAssignmentsResponse> GetUserAssignments(DateTime? updatedSince = null, int? page = 1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
     }
 }

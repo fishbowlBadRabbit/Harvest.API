@@ -26,10 +26,10 @@ namespace Harvest.Api
         public string Notes { get; set; }
         public string Currency { get; set; }
         public string State { get; set; }
-        public DateTime PeriodStart { get; set; }
-        public DateTime PeriodEnd { get; set; }
-        public DateTime IssueDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? PeriodStart { get; set; }
+        public DateTime? PeriodEnd { get; set; }
+        public DateTime? IssueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public string PaymentTerm { get; set; }
         public DateTime? SentAt { get; set; }
         public DateTime? PaidAt { get; set; }
