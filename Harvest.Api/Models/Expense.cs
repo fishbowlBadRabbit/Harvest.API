@@ -20,6 +20,8 @@ namespace Harvest.Api
         public bool IsBilled { get; set; }
         public string LockedReason { get; set; }
         public DateTime SpentDate { get; set; }
+        public decimal? TotalCost { get; set; }
+        public decimal? Units { get; set; }
     }
 
     public class ExpenseCategory : BaseModel
