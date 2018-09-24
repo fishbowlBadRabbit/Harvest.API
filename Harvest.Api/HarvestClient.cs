@@ -52,7 +52,7 @@ namespace Harvest.Api
         //}
 
         public HarvestClient(string userAgent, string accessToken)
-            
+
         {
             if (string.IsNullOrEmpty(userAgent))
                 throw new ArgumentNullException(nameof(userAgent));
@@ -617,7 +617,8 @@ namespace Harvest.Api
         {
             await RefreshTokenIsNeeded();
 
-            return await SimpleRequestBuilder($"{harvestApiUrl}/contacts/", accountId, new HttpMethod("PATCH"))
+            return await SimpleRequestBuilder($"{harvestApiUrl}/projects/{projectId}", accountId, new HttpMethod("PATCH"))
+            .UseJson()
             .Form("client_id", clientId)
             .Form("name", name)
             .Form("code", code)
