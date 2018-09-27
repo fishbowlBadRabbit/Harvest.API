@@ -17,7 +17,7 @@ namespace Harvest.Api
     }
 
     public class PaymentsResponse : PagedList
-    {
-        public Payment[] Payments { get; set; }
+    {        
+        public Payment[] InvoicePayments { get; set; }
     }
 }

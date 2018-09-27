@@ -29,7 +29,7 @@ namespace Example
             InitializeComponent();
 
 
-            client = new HarvestClient("HavestApiClient")
+            client = new HarvestClient("HavestApiClient","")
             {
                 ClientId = "<ClientId>",
                 ClientSecret = "<ClientSecret>",

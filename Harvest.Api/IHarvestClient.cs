@@ -72,13 +72,13 @@ namespace Harvest.Api
 
         Task<Client> GetClient(long clientId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ClientsResponse> GetClients(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ClientsResponse> GetClients(DateTime? updatedSince=null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
 
         #region ClientContacts
 
-        Task<ClientContactsResponse> GetContacts(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ClientContactsResponse> GetContacts(DateTime? updatedSince=null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
 
@@ -98,7 +98,7 @@ namespace Harvest.Api
 
         Task<Invoice> GetInvoice(long invoiceId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<InvoiceResponse> GetInvoices(DateTime? updatedSince, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<InvoiceResponse> GetInvoices(DateTime? updatedSince = null, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region Project
@@ -127,7 +127,7 @@ namespace Harvest.Api
         #region taskAssignment
         Task<TaskAssignment> GetTaskAssignment(long projectId, long assignmentId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince = null, int? page =1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region UserAssignment

@@ -432,11 +432,11 @@ namespace Harvest.Api
         {
             await RefreshTokenIsNeeded();
 
-            return await SimpleRequestBuilder($"{harvestApiUrl}/clients/{clientId}", clientId)
+            return await SimpleRequestBuilder($"{harvestApiUrl}/clients/{clientId}", accountId) // Replace clientId to accountId
                .SendAsync<Client>(_httpClient, cancellationToken);
         }
 
-        public async Task<ClientsResponse> GetClients(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ClientsResponse> GetClients(DateTime? updatedSince =null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -451,7 +451,7 @@ namespace Harvest.Api
 
         #region ClientContacts
 
-        public async Task<ClientContactsResponse> GetContacts(DateTime? updatedSince, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ClientContactsResponse> GetContacts(DateTime? updatedSince=null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -526,7 +526,7 @@ namespace Harvest.Api
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }
 
-        public async Task<InvoiceResponse> GetInvoices(DateTime? updatedSince, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<InvoiceResponse> GetInvoices(DateTime? updatedSince = null, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
 
@@ -696,8 +696,7 @@ namespace Harvest.Api
         {
             await RefreshTokenIsNeeded();
 
-            return await SimpleRequestBuilder($"{harvestApiUrl}/payments/", accountId)
-                .Query("invoice_id", invoiceId)
+            return await SimpleRequestBuilder($"{harvestApiUrl}/invoices/{invoiceId}/payments/", accountId)               
                 .Query("page", page)
                 .Query("per_page", perPage)
                 .Query("updated_since", updatedSince)
@@ -724,7 +723,7 @@ namespace Harvest.Api
                 .SendAsync<TaskAssignment>(_httpClient, cancellationToken);
         }
 
-        public async Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince, int? page, int? perPage, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince = null, int? page=1, int? perPage=null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await SimpleRequestBuilder($"{harvestApiUrl}/task_assignments", accountId)
                 .Query("page", page)
