@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Harvest.Api
@@ -48,6 +49,26 @@ namespace Harvest.Api
         public decimal Amount { get; set; }
         public bool Taxed { get; set; }
         public bool Taxed2 { get; set; }
+
+        public override string ToString()
+        {
+            var items = new string[]
+            {
+                Kind,
+                Description,
+                Quantity.ToString(CultureInfo.InvariantCulture),
+                UnitPrice.ToString(CultureInfo.InvariantCulture),
+                Amount.ToString(CultureInfo.InvariantCulture),
+                Taxed.ToString().ToLower(),
+                Taxed2.ToString().ToLower()
+            };
+            return string.Join(",", items);
+        }
+
+        public static string GetHeaders()
+        {
+            return "kind,description,quantity,unit_price,amount,taxed,taxed2";
+        }
     }
 
     public class InvoiceResponse : PagedList

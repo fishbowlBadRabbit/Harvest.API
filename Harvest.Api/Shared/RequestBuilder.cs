@@ -192,6 +192,31 @@ namespace Harvest.Api
             return this;
         }
 
+        public RequestBuilder Json(string name, List<InvoiceLineItem> value)
+        {
+            if (value != null)
+            {
+                var jref = new JArray();
+
+                foreach (var item in value)
+                {
+                    jref.Add(new JObject
+                    {
+                        ["kind"] = item.Kind,
+                        ["description"] = item.Description,
+                        ["quantity"] = item.Quantity,
+                        ["unit_price"] = item.UnitPrice,
+                        ["taxed"] = item.Taxed,
+                        ["taxed2"] = item.Taxed2
+                    });
+                }
+
+                _json[name] = jref;
+            };
+
+            return this;
+        }
+
         public RequestBuilder Json(string name, string value)
         {
             if (value != null)
@@ -256,10 +281,12 @@ namespace Harvest.Api
 
         public async Task<T> SendAsync<T>(HttpClient httpClient, CancellationToken token = default(CancellationToken))
         {
-            var stream = await SendAsyncInternal(httpClient, token, true);
+            var stream = SendAsyncInternal(httpClient, token, true).Result;
 
             using (var reader = new JsonTextReader(new StreamReader(stream)))
+            {
                 return _serializer.Deserialize<T>(reader);
+            }
         }
 
         public async System.Threading.Tasks.Task SendAsync(HttpClient httpClient, CancellationToken token = default(CancellationToken))
@@ -279,6 +306,8 @@ namespace Harvest.Api
                     {
                         _serializer.Serialize(stringWriter, _json);
                         request.Content = new StringContent(stringWriter.ToString(), null, JsonMimeType);
+
+
                     }
                 }
                 else
@@ -292,7 +321,7 @@ namespace Harvest.Api
                 request.Headers.Add(header.Key, header.Value);
             }
 
-            var resp = await httpClient.SendAsync(request, token);
+            var resp = await httpClient.SendAsync(request, token).ConfigureAwait(false);
 
             try
             {
@@ -304,7 +333,11 @@ namespace Harvest.Api
             }
 
             if (readRespose)
-                return await resp.Content.ReadAsStreamAsync();
+            {
+                var result = await resp.Content.ReadAsStreamAsync();
+
+                return result;
+            }
 
             return null;
         }

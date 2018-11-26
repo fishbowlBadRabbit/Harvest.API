@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Harvest.Api
@@ -489,22 +490,23 @@ namespace Harvest.Api
 
         #region Invoice
 
-        public async Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, string lineItems, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
-
+            
             return await SimpleRequestBuilder($"{harvestApiUrl}/invoices", accountId, HttpMethod.Post)
-                .Form("client_id", clientId)
-                .Form("number", number)
-                .Form("purchase_order", purchaseOrder)
-                .Form("tax", tax)
-                .Form("tax2", tax2)
-                .Form("subject", subject)
-                .Form("notes", notes)
-                .Form("currency", currency)
-                .Form("issue_date", issuedAt)
-                .Form("due_date", dueAt)
-                .Form("line_items", String.Join(",", lineItems))
+                .UseJson()
+                .Json("client_id", clientId)
+                .Json("number", number)
+                .Json("purchase_order", purchaseOrder)
+                .Json("tax", tax)
+                .Json("tax2", tax2)
+                .Json("subject", subject)
+                .Json("notes", notes)
+                .Json("currency", currency)
+                .Json("issue_date", issuedAt)
+                .Json("due_date", dueAt)
+                .Json("line_items", lineItems)
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }
 
