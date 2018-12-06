@@ -490,7 +490,7 @@ namespace Harvest.Api
 
         #region Invoice
 
-        public async Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, string paymentTerms, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             await RefreshTokenIsNeeded();
             
@@ -506,6 +506,7 @@ namespace Harvest.Api
                 .Json("currency", currency)
                 .Json("issue_date", issuedAt)
                 .Json("due_date", dueAt)
+                .Json("payment_term", paymentTerms )
                 .Json("line_items", lineItems)
                 .SendAsync<Invoice>(_httpClient, cancellationToken);
         }

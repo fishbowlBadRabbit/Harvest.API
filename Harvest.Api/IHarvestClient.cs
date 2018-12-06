@@ -92,7 +92,7 @@ namespace Harvest.Api
 
         #region Invoice
 
-        Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, string paymentTerms, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<bool> DeleteInvoice(long invoiceId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
