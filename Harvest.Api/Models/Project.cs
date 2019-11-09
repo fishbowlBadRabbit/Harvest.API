@@ -20,31 +20,16 @@ namespace Harvest.Api
         public DateTime? EndsOn { get; set; }
         public bool IsBillable { get; set; }
         public string Notes { get; set; }
-        public IdNameModel Client { get; set; }
+        public Client Client { get; set; }
 
         public decimal? CostBudget { get; set; }
         public bool CostBudgetIncludeExpenses { get; set; }
         public decimal? HourlyRate { get; set; }
-
-        public decimal? Estimate { get; set; }
-        public string EstimateBy { get; set; }
     }
 
-    public class Client : BaseModel
-    {
-        public string Name { get; set; }
-        public string Currency { get; set; }
-        public bool IsActive { get; set; }
-        public string Address { get; set; }
-    }
 
     public class ProjectsResponse : PagedList
     {
         public Project[] Projects { get; set; }
-    }
-
-    public class ClientsResponse : PagedList
-    {
-        public Client[] Clients { get; set; }
     }
 }

@@ -15,14 +15,16 @@ namespace Harvest.Api
     {
         private const string AccountIdHeader = "Harvest-Account-Id";
         private const string DateFormat = "yyyy-MM-dd";
+        private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
+        private const string TimeFormat = @"hh\:mm\:ss";
         private readonly static JsonSerializer _serializer;
         internal const string JsonMimeType = "application/json";
 
         public static HttpMethod PatchMethod = new HttpMethod("PATCH");
 
-        private Dictionary<string, string> _query = new Dictionary<string, string>();
-        private Dictionary<string, string> _form = new Dictionary<string, string>();
-        private Dictionary<string, string> _headers = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _query = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _form = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
         private JObject _json;
         private HttpMethod _httpMethod;
         private Uri _uri;
@@ -69,38 +71,6 @@ namespace Harvest.Api
             return Begin(HttpMethod.Get, uri);
         }
 
-        public RequestBuilder Query(string name, long? value)
-        {
-            if (value != null)
-                this._query.Add(name, value.ToString());
-
-            return this;
-        }
-
-        public RequestBuilder Query(string name, int? value)
-        {
-            if (value != null)
-                this._query.Add(name, value.ToString());
-
-            return this;
-        }
-
-        public RequestBuilder Query(string name, bool? value)
-        {
-            if (value != null)
-                this._query.Add(name, value.ToString().ToLowerInvariant());
-
-            return this;
-        }
-
-        public RequestBuilder Query(string name, DateTime? value)
-        {
-            if (value != null)
-                this._query.Add(name, value.Value.ToString(DateFormat));
-
-            return this;
-        }
-
         public RequestBuilder Query(string name, string value)
         {
             if (value != null)
@@ -109,62 +79,40 @@ namespace Harvest.Api
             return this;
         }
 
-        public RequestBuilder Form(string name, string value)
+        public RequestBuilder Query(string name, long? value)
         {
-            if (value != null)
-                this._form.Add(name, value);
-
-            return this;
+            return Query(name, value?.ToString());
         }
 
-        public RequestBuilder Form(string name, TimeSpan? value)
+        public RequestBuilder Query(string name, int? value)
         {
-            if (value != null)
-                this._form.Add(name, value.ToString()); //TODO
-
-            return this;
+            return Query(name, value?.ToString());
         }
 
-        public RequestBuilder Form(string name, long? value)
+        public RequestBuilder Query(string name, bool? value)
         {
-            if (value != null)
-                this._form.Add(name, value.ToString());
-
-            return this;
+            return Query(name, value?.ToString().ToLowerInvariant());
         }
 
-        public RequestBuilder Form(string name, bool? value)
+        public RequestBuilder Query(string name, DateTime? value, bool truncateTime = false)
         {
-            if (value != null)
-                this._form.Add(name, value.ToString().ToLowerInvariant());
-
-            return this;
+            return Query(name, value?.ToString(truncateTime ? DateFormat : DateTimeFormat));
         }
 
-        public RequestBuilder Form(string name, decimal? value)
+        public RequestBuilder QueryPageSince(DateTime? updatedSince = null, int? page = null, int? perPage = null)
         {
-            if (value != null)
-                this._form.Add(name, value.ToString());
-
-            return this;
+            return Query("updated_since", updatedSince).Query("page", page).Query("per_page", perPage);
         }
 
-        public RequestBuilder Form(string name, DateTime? value)
+        private RequestBuilder BodyInternal(string name, object value)
         {
-            if (value != null)
-                this._form.Add(name, value.Value.ToString(DateFormat));
+            if (value == null)
+                return this;
 
-            return this;
-        }
-
-        public RequestBuilder Form(string name, ExternalReference value)
-        {
-            if (value != null)
-            {
-                this.Form($"{name}.id", value.Id);
-                this.Form($"{name}.group_id", value.GroupId);
-                this.Form($"{name}.permalink", value.Permalink);
-            }
+            if (_json == null)
+                _form.Add(name, Convert.ToString(value));
+            else
+                _json.Add(name, JToken.FromObject(value));
 
             return this;
         }
@@ -175,85 +123,82 @@ namespace Harvest.Api
             return this;
         }
 
-        public RequestBuilder Json(string name, ExternalReference value)
+        public RequestBuilder Body(string name, string value)
         {
-            if (value != null)
+            return BodyInternal(name, value);
+        }
+
+        public RequestBuilder Body(string name, TimeSpan? value)
+        {
+            return BodyInternal(name, value?.ToString(TimeFormat));
+        }
+
+        public RequestBuilder Body(string name, long? value)
+        {
+            return BodyInternal(name, value);
+        }
+
+        public RequestBuilder Body(string name, bool? value)
+        {
+            return BodyInternal(name, value);
+        }
+
+        public RequestBuilder Body(string name, decimal? value)
+        {
+            return BodyInternal(name, value);
+        }
+
+        public RequestBuilder Body(string name, DateTime? value, bool truncateTime = false)
+        {
+            return BodyInternal(name, value?.ToString(truncateTime ? DateFormat : DateTimeFormat));
+        }
+
+        public RequestBuilder Body(string name, ExternalReference value)
+        {
+            if (value == null)
+                return this;
+
+            if (_json == null)
             {
-                var jref = new JObject
+                _form.Add($"{name}.id", value.Id);
+                _form.Add($"{name}.group_id", value.GroupId);
+                _form.Add($"{name}.permalink", value.Permalink);
+            }
+            else
+            {
+                _json.Add(name, new JObject
                 {
                     ["id"] = value.Id,
                     ["group_id"] = value.GroupId,
                     ["permalink"] = value.Permalink
-                };
-
-                _json[name] = jref;
-            };
+                });
+            }
 
             return this;
         }
 
-        public RequestBuilder Json(string name, List<InvoiceLineItem> value)
+        public RequestBuilder Body(string name, long[] value)
         {
-            if (value != null)
-            {
-                var jref = new JArray();
+            if (value == null)
+                return this;
 
-                foreach (var item in value)
-                {
-                    jref.Add(new JObject
-                    {
-                        ["kind"] = item.Kind,
-                        ["description"] = item.Description,
-                        ["quantity"] = item.Quantity,
-                        ["unit_price"] = item.UnitPrice,
-                        ["taxed"] = item.Taxed,
-                        ["taxed2"] = item.Taxed2
-                    });
-                }
-
-                _json[name] = jref;
-            };
+            if (_json == null)
+                throw new NotImplementedException();
+            else
+                _json.Add(name, new JArray(value));
 
             return this;
         }
 
-        public RequestBuilder Json(string name, string value)
+        public RequestBuilder Body(string name, string[] value)
         {
-            if (value != null)
-                _json[name] = value;
+            if (value == null)
+                return this;
 
-            return this;
-        }
-
-        public RequestBuilder Json(string name, long? value)
-        {
-            if (value != null)
-                _json[name] = value;
-
-            return this;
-        }
-
-        public RequestBuilder Json(string name, decimal? value)
-        {
-            if (value != null)
-                _json[name] = value;
-
-            return this;
-        }
-
-        public RequestBuilder Json(string name, DateTime? value)
-        {
-            if (value != null)
-                _json[name] = value.Value.ToString(DateFormat);
-
-            return this;
-        }
-
-
-        public RequestBuilder Json(string name, TimeSpan? value)
-        {
-            if (value != null)
-                _json[name] = value.Value.ToString(DateFormat);
+            if (_json == null)
+                throw new NotImplementedException();
+            else
+                _json.Add(name, new JArray(value));
 
             return this;
         }
@@ -279,17 +224,15 @@ namespace Harvest.Api
             return Header("User-Agent", userAgent);
         }
 
-        public async Task<T> SendAsync<T>(HttpClient httpClient, CancellationToken token = default(CancellationToken))
+        public async Task<T> SendAsync<T>(HttpClient httpClient, CancellationToken token = default)
         {
-            var stream = SendAsyncInternal(httpClient, token, true).Result;
+            var stream = await SendAsyncInternal(httpClient, token, true);
 
             using (var reader = new JsonTextReader(new StreamReader(stream)))
-            {
                 return _serializer.Deserialize<T>(reader);
-            }
         }
 
-        public async System.Threading.Tasks.Task SendAsync(HttpClient httpClient, CancellationToken token = default(CancellationToken))
+        public async System.Threading.Tasks.Task SendAsync(HttpClient httpClient, CancellationToken token = default)
         {
             await SendAsyncInternal(httpClient, token, false);
         }
@@ -306,8 +249,6 @@ namespace Harvest.Api
                     {
                         _serializer.Serialize(stringWriter, _json);
                         request.Content = new StringContent(stringWriter.ToString(), null, JsonMimeType);
-
-
                     }
                 }
                 else
@@ -321,7 +262,7 @@ namespace Harvest.Api
                 request.Headers.Add(header.Key, header.Value);
             }
 
-            var resp = await httpClient.SendAsync(request, token).ConfigureAwait(false);
+            var resp = await httpClient.SendAsync(request, token);
 
             try
             {
@@ -333,26 +274,22 @@ namespace Harvest.Api
             }
 
             if (readRespose)
-            {
-                var result = await resp.Content.ReadAsStreamAsync();
-
-                return result;
-            }
+                return await resp.Content.ReadAsStreamAsync();
 
             return null;
         }
 
-        public static Uri BuildUri(string uri, Dictionary<string, string> query)
+        public static Uri BuildUri(string uri, IEnumerable<KeyValuePair<string, string>> query)
         {
             return new UriBuilder(uri) { Query = ToQuery(query) }.Uri;
         }
 
-        public static Uri BuildUri(Uri uri, Dictionary<string, string> query)
+        public static Uri BuildUri(Uri uri, IEnumerable<KeyValuePair<string, string>> query)
         {
             return new UriBuilder(uri) { Query = ToQuery(query) }.Uri;
         }
 
-        public static string ToQuery(Dictionary<string, string> query)
+        public static string ToQuery(IEnumerable<KeyValuePair<string, string>> query)
         {
             var builder = new StringBuilder();
             var first = true;

@@ -6,39 +6,34 @@ namespace Harvest.Api
 {
     public class Expense : BaseModel
     {
-        public IdNameModel Client { get; set; }
-        public IdNameModel Project { get; set; }
-        public IdNameModel ExpenseCategory { get; set; }
+        public Client Client { get; set; }
+        public ExpenseInvoice Invoice { get; set; }
+        public ExpenseCategory ExpenseCategory { get; set; }
         public IdNameModel User { get; set; }
-        public IdNameModel UserAssignment { get; set; }
         public Receipt Receipt { get; set; }
-        public IdNameModel Invoice { get; set; }
-        public string Notes { get; set; }
-        public bool Billable { get; set; }
-        public bool IsClosed { get; set; }
+        public UserAssignment UserAssignment { get; set; }
+        public ProjectReference Project { get; set; }
+        public bool? Billable { get; set; }
+        public DateTime? SpentDate { get; set; }
+        public string LockedReason { get; set; }
         public bool IsLocked { get; set; }
         public bool IsBilled { get; set; }
-        public string LockedReason { get; set; }
-        public DateTime SpentDate { get; set; }
-        public decimal? TotalCost { get; set; }
-        public decimal? Units { get; set; }
+        public bool IsClosed { get; set; }
+        public string Notes { get; set; }
+
+        public decimal TotalCost { get; set; }
+        public double Units { get; set; }
     }
 
-    public class ExpenseCategory : BaseModel
+    public class ExpenseCategory : IdNameModel
     {
-        public string Name { get; set; }
-        public decimal? UnitPrice { get; set; }
         public string UnitName { get; set; }
-        public bool IsActive { get; set; }
+        public decimal? UnitPrice { get; set; }
     }
 
-    public class ExpenseCategoryResponse : PagedList
+    public class ExpenseInvoice
     {
-        public ExpenseCategory[] ExpenseCategories { get; set; }
-    }
-
-    public class ExpensesResponse : PagedList
-    {
-        public Expense[] Expenses { get; set; }
+        public long Id { get; set; }
+        public string Number { get; set; }
     }
 }
