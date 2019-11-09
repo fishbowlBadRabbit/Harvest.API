@@ -224,7 +224,7 @@ namespace Harvest.Api
             return Header("User-Agent", userAgent);
         }
 
-        public async Task<T> SendAsync<T>(HttpClient httpClient, CancellationToken token = default)
+        public async Task<T> SendAsync<T>(HttpClient httpClient, CancellationToken token = default(CancellationToken))
         {
             var stream = await SendAsyncInternal(httpClient, token, true);
 
@@ -232,7 +232,7 @@ namespace Harvest.Api
                 return _serializer.Deserialize<T>(reader);
         }
 
-        public async System.Threading.Tasks.Task SendAsync(HttpClient httpClient, CancellationToken token = default)
+        public async System.Threading.Tasks.Task SendAsync(HttpClient httpClient, CancellationToken token = default(CancellationToken))
         {
             await SendAsyncInternal(httpClient, token, false);
         }

@@ -8,4 +8,8 @@ namespace Harvest.Api
     {
         public Expense[] Expenses { get; set; }
     }
+    public class ExpenseCategoriesResponse : IdNameModel
+    {
+        public ExpenseCategory[] ExpenseCategories { get; set; }
+    }
 }

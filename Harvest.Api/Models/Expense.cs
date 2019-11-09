@@ -29,6 +29,8 @@ namespace Harvest.Api
     {
         public string UnitName { get; set; }
         public decimal? UnitPrice { get; set; }
+
+        public bool IsActive { get; set; }
     }
 
     public class ExpenseInvoice

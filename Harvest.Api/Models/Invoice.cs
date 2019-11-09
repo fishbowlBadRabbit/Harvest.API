@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Harvest.Api
@@ -48,6 +49,44 @@ namespace Harvest.Api
         public decimal Amount { get; set; } // The line item subtotal (quantity * unit_price).
         public bool Taxed { get; set; } // Whether the invoice’s tax percentage applies to this line item.
         public bool Taxed2 { get; set; } // Whether the invoice’s tax2 percentage applies to this line item.
+
+        public LineItem()
+        {
+
+        }
+
+        public LineItem(string str)
+        {
+            var arr = str.Split(',');
+
+            Kind = arr[0];
+            Description = arr[1];
+            Quantity = decimal.Parse(arr[2]);
+            UnitPrice = decimal.Parse(arr[3]);
+            Amount = decimal.Parse(arr[4]);
+            Taxed = bool.Parse(arr[5]);
+            Taxed2 = bool.Parse(arr[6]);
+        }
+
+        public override string ToString()
+        {
+            var items = new string[]
+            {
+                Kind,
+                Description,
+                Quantity.ToString(CultureInfo.InvariantCulture),
+                UnitPrice.ToString(CultureInfo.InvariantCulture),
+                Amount.ToString(CultureInfo.InvariantCulture),
+                Taxed.ToString().ToLower(),
+                Taxed2.ToString().ToLower()
+            };
+            return string.Join(",", items);
+        }
+
+        public static string GetHeaders()
+        {
+            return "kind,description,quantity,unit_price,amount,taxed,taxed2";
+        }
     }
 
     public class InvoicesResponse : PagedList

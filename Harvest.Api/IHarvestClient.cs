@@ -34,10 +34,7 @@ namespace Harvest.Api
 
         Task<ProjectAssignmentsResponse> GetProjectAssignmentsAsync(long? userId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null,
           long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<ProjectsResponse> GetProjectsAsync(long? clientId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null,
-          long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
-
+        
         Task<TasksResponse> GetTasksAsync(DateTime? updatedSince = null, int? page = null, int? perPage = null,
           long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -68,11 +65,13 @@ namespace Harvest.Api
 
         #region Clients
 
-        Task<Client> CreateClient(string name, string details, bool active, string currency, long? highriseId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Client> CreateClientAsync(string name, bool? isActive = null, string address = null,
+            string currency = null, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Client> GetClient(long clientId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Client> GetClientAsync(long clientId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ClientsResponse> GetClients(DateTime? updatedSince=null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ClientsResponse> GetClientsAsync(bool? isActive = null, DateTime? updatedSince=null, long? accountId = null, int? page = null, int? perPage = null, CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
 
@@ -84,36 +83,54 @@ namespace Harvest.Api
 
         #region ExpenseCategory
 
-        Task<ExpenseCategoryResponse> GetExpenseCategories(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ExpenseCategoriesResponse> GetExpenseCategories(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ExpenseCategory> GetExpenseCategory(long categoryID, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ExpenseCategory> GetExpenseCategory(long categoryId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
 
         #region Invoice
 
-        Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<InvoiceLineItem> lineItems, string paymentTerms, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Invoice> CreateInvoice(long? clientId, string currency, DateTime? issuedAt, DateTime? dueAt, string number, string subject, string purchaseOrder, string clientKey, string notes, decimal? tax, decimal? tax2, decimal? taxAmount, decimal? tax2Amount, string kind, List<LineItem> lineItems, string paymentTerms, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<bool> DeleteInvoice(long invoiceId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Invoice> GetInvoice(long invoiceId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Invoice> GetInvoiceAsync(string invoiceId, long? clientId = null, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<InvoiceResponse> GetInvoices(DateTime? updatedSince = null, int? page = 1, int? perPage = 100, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<InvoicesResponse> GetInvoicesAsync(long? clientId = null, long? projectId = null,
+            InvoiceState? state = null, DateTime? from = null, DateTime? to = null,
+            DateTime? updatedSince = null, int? page = null, int? perPage = null,
+            long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region Project
 
-        Task<Project> CreateProject(string name, long? clientId, bool? active, string billBy, string code, string notes, string budgetBy, decimal? budget, bool? billable, decimal? hourlyRate, bool? notifyWhenOverBudget, decimal? overBudgetNotificationPercentage, bool? showBudgetToAll, decimal? costBudget, bool? costBudgetIncludeExpenses, DateTime? startsOn, DateTime? endsOn, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Project> CreateProjectAsync(long clientId, string name, bool isBillable, string billBy = "none",
+            string code = null, bool? isFixedFee = null, decimal? hourlyRate = null, decimal? budget = null,
+            string budgetBy = "none",
+            bool? budgetIsMonthly = null, bool? notifyWhenOverBudget = null,
+            bool? overBudgetNotificationPercentage = null,
+            bool? showBudgetToAll = null, decimal? costBudget = null, bool? costBudgetIncludeExpenses = null,
+            decimal? fee = null, string notes = null, DateTime? startsOn = null, DateTime? endsOn = null,
+            long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Project> GetProject(long projectId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Project> GetProjectAsync(long projectId, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ProjectsResponse> GetProjects(long? clientId, DateTime? updatedSince, long? accountId = null, int? page = 1, int? perPage = 100, bool? isActive = true, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ProjectsResponse> GetProjectsAsync(long? clientId = null, DateTime? updatedSince = null, int? page = null,
+            int? perPage = null,
+            long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Project> UpdateProject(long projectId, bool? active, bool? billable, string billBy, decimal? budget, string budgetBy, long? clientId, string code, decimal? costBudget, bool? costBudgetIncludeExpenses, DateTime? endsOn, decimal? estimate, string estimateBy, decimal? hourlyRate, string name, string notes, bool? notifyWhenOverBudget, decimal? overBudgetNotificationPercentage, bool? showBudgetToAll, DateTime? startsOn, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region Expenses
-        Task<ExpensesResponse> GetExpenses(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, long? projectId = null, long? clientId = null, long? userId = null, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<ExpensesResponse> GetExpenses(long? userId = null, long? clientId = null, long? projectId = null,
+            bool? isBilled = null,
+            DateTime? updatedSince = null, int? page = null, int? perPage = null, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region Payment
@@ -121,13 +138,14 @@ namespace Harvest.Api
         #endregion
 
         #region task
-        Task<Task> GetTask(long taskId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Task> GetTaskAsync(long taskId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region taskAssignment
-        Task<TaskAssignment> GetTaskAssignment(long projectId, long assignmentId, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<TaskAssignmentsResponse> GetTaskAssignments(DateTime? updatedSince = null, int? page =1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<TaskAssignment> GetTaskAssignmentAsync(long? projectId = null, bool? isActive = null,DateTime? updatedSince = null, int? page = null, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<TaskAssignmentsResponse> GetTaskAssignmentsAsync(DateTime? updatedSince = null, int? page =1, int? perPage = null, bool? isActive = true, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region UserAssignment

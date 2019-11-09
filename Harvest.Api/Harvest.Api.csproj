@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;net46;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;net46</TargetFrameworks>
     <Version>0.0.18</Version>
     <AssemblyVersion>0.0.0.18</AssemblyVersion>
     <FileVersion>0.0.0.18</FileVersion>
@@ -14,7 +14,6 @@
     <Description>.NET client for Harvest API Version 2</Description>
     <Authors>Volodymyr Baydalka</Authors>
     <PackageTags>harvest harvestapp harvestapi</PackageTags>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
