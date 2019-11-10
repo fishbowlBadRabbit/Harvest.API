@@ -137,7 +137,20 @@ namespace Harvest.Api
             bool? isBilled = null,
             DateTime? updatedSince = null, DateTime? from = null, DateTime? to = null, int? page = null, int? perPage = null, long? accountId = null,
             CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Expense> CreateExpense(long projectId, long expenseCategoryId, DateTime spentDate, long? userId = null,
+            int? units = null, decimal? totalCost = null, string notes = null, bool? billable = null,
+            long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        ThreadingTask DeleteExpense(long expenseId, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Expense> UpdateExpense(long expenseId, long? projectId = null, long? expenseCategoryId = null,
+            DateTime? spentDate = null, int? units = null,
+            decimal? totalCost = null, string notes = null, bool? billable = null, long? accountId = null,
+            CancellationToken cancellationToken = default(CancellationToken));
         #endregion
+
 
         #region Payment
         Task<PaymentsResponse> GetPayments(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
