@@ -22,11 +22,12 @@ namespace Harvest.Api
         public string Notes { get; set; }
 
         public decimal TotalCost { get; set; }
-        public double Units { get; set; }
+        public decimal Units { get; set; }
     }
 
-    public class ExpenseCategory : IdNameModel
+    public class ExpenseCategory : BaseModel
     {
+        public string Name { get; set; }
         public string UnitName { get; set; }
         public decimal? UnitPrice { get; set; }
 

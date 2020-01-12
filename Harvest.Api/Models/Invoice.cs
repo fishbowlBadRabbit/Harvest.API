@@ -59,13 +59,38 @@ namespace Harvest.Api
         {
             var arr = str.Split(',');
 
+            // if the splitSize is more than 8, additional , are part of the description and we need to move the index by addon
+            var splitSize = arr.Length;
+            var addon = splitSize - Math.Min(splitSize,8);
+
             Kind = arr[0];
             Description = arr[1];
-            Quantity = decimal.Parse(arr[2]);
-            UnitPrice = decimal.Parse(arr[3]);
-            Amount = decimal.Parse(arr[4]);
-            Taxed = bool.Parse(arr[5]);
-            Taxed2 = bool.Parse(arr[6]);
+            try
+            {
+                Quantity = decimal.Parse(arr[2 + addon], CultureInfo.CurrentCulture);
+                UnitPrice = decimal.Parse(arr[3 + addon], CultureInfo.CurrentCulture);
+                Amount = decimal.Parse(arr[4 + addon], CultureInfo.CurrentCulture);
+                Taxed = bool.Parse(arr[5 + addon]);
+                Taxed2 = bool.Parse(arr[6 + addon]);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("unable to parse " + str);
+                throw;
+            }
+        }
+
+        private Decimal TryParseThrow(string str)
+        {
+            decimal result;
+            if(decimal.TryParse(str,out result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new ArgumentException("Unable to parse " + str);
+            }
         }
 
         public override string ToString()

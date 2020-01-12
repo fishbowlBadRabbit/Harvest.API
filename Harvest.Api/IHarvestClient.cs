@@ -32,6 +32,9 @@ namespace Harvest.Api
 
         Task<ProjectAssignmentsResponse> GetProjectAssignmentsAsync(long? userId = null, DateTime? updatedSince = null, int? page = null, int? perPage = null,
           long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<ProjectAssignment> CreateProjectAssignmentAsync(long projectId, long userId, bool? isActive = null, bool? isProjectManager = null, bool? useDefaultRates = null, decimal? hourlyRate = null, decimal? budget = null,
+        long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<TasksResponse> GetTasksAsync(DateTime? updatedSince = null, int? page = null, int? perPage = null,
           long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
@@ -139,10 +142,14 @@ namespace Harvest.Api
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Expense> CreateExpense(long projectId, long expenseCategoryId, DateTime spentDate, long? userId = null,
-            int? units = null, decimal? totalCost = null, string notes = null, bool? billable = null,
+            decimal? units = null, decimal? totalCost = null, string notes = null, bool? billable = null,
             long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        ThreadingTask DeleteExpense(long expenseId, long? accountId = null,
+        Task<Expense> UpdateExpense(long expenseId, long projectId, long expenseCategoryId, DateTime spentDate, long? userId = null,
+            decimal? units = null, decimal? totalCost = null, string notes = null, bool? billable = null,
+            long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<bool> DeleteExpense(long expenseId, long? accountId = null,
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Expense> UpdateExpense(long expenseId, long? projectId = null, long? expenseCategoryId = null,
@@ -153,7 +160,7 @@ namespace Harvest.Api
 
 
         #region Payment
-        Task<PaymentsResponse> GetPayments(DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? invoiceId = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<PaymentsResponse> GetPayments(long invoiceId, DateTime? updatedSince = null, int? page = 1, int? perPage = null, long? accountId = null, CancellationToken cancellationToken = default(CancellationToken));
         #endregion
 
         #region task

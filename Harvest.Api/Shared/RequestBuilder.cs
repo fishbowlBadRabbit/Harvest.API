@@ -248,6 +248,9 @@ namespace Harvest.Api
                     using (var stringWriter = new StringWriter())
                     {
                         _serializer.Serialize(stringWriter, _json);
+                        
+                        Console.WriteLine(stringWriter.ToString());
+
                         request.Content = new StringContent(stringWriter.ToString(), null, JsonMimeType);
                     }
                 }
